@@ -28,6 +28,18 @@ var shortcutFunctions = {
       vm.toggleItemRead(vm.itemSelectedDetails)
     }
   },
+  openShortcuts: function() {
+    vm.showSettings('shortcuts')
+  },
+  closeModal: function() {
+    if (vm.settings) {
+      vm.settings = ''
+      return
+    }
+    if (vm.itemSelected != null) {
+      vm.itemSelected = null
+    }
+  },
   markAllRead: function() {
     // same condition as 'Mark all read button'
     if (vm.filterSelected == 'unread'){
@@ -40,7 +52,9 @@ var shortcutFunctions = {
     }
   },
   focusSearch: function() {
-    document.getElementById("searchbar").focus()
+    var input = document.getElementById("searchbar")
+    input.focus()
+    input.select()
   },
   nextItem(){
     vm.navigateToItem(+1)
@@ -63,6 +77,9 @@ var shortcutFunctions = {
   closeItem: function () {
     vm.itemSelected = null
   },
+  refreshFeeds: function() {
+    vm.fetchAllFeeds()
+  },
   showAll() {
     vm.filterSelected = ''
   },
@@ -79,8 +96,10 @@ var keybindings = {
   "o": shortcutFunctions.openItemLink,
   "v": shortcutFunctions.openItemLink,
   "i": shortcutFunctions.toggleReadability,
-  "r": shortcutFunctions.toggleItemRead,
+  "r": shortcutFunctions.refreshFeeds,
   "R": shortcutFunctions.markAllRead,
+  "?": shortcutFunctions.openShortcuts,
+  "Escape": shortcutFunctions.closeModal,
   "s": shortcutFunctions.toggleItemStarred,
   "/": shortcutFunctions.focusSearch,
   "j": shortcutFunctions.nextItem,
@@ -90,6 +109,7 @@ var keybindings = {
   "f": shortcutFunctions.scrollForward,
   "b": shortcutFunctions.scrollBackward,
   "q": shortcutFunctions.closeItem,
+  "g": shortcutFunctions.toggleItemRead,
   "1": shortcutFunctions.showUnread,
   "2": shortcutFunctions.showStarred,
   "3": shortcutFunctions.showAll,
@@ -110,6 +130,10 @@ var codebindings = {
   "KeyF": shortcutFunctions.scrollForward,
   "KeyB": shortcutFunctions.scrollBackward,
   "KeyQ": shortcutFunctions.closeItem,
+  "KeyG": shortcutFunctions.toggleItemRead,
+  "KeyR": shortcutFunctions.refreshFeeds,
+  "KeySlash": shortcutFunctions.openShortcuts,
+  "Escape": shortcutFunctions.closeModal,
   "Digit1": shortcutFunctions.showUnread,
   "Digit2": shortcutFunctions.showStarred,
   "Digit3": shortcutFunctions.showAll,
@@ -127,6 +151,12 @@ function isTextBox(element) {
 }
 
 document.addEventListener('keydown',function(event) {
+  // in input-like element, Esc only blurs (does not clear)
+  if (event.key === 'Escape' && isTextBox(event.target)) {
+    event.target.blur()
+    return
+  }
+
   // Ignore while focused on text or
   // when using modifier keys (to not clash with browser behaviour)
   if (isTextBox(event.target) || event.metaKey || event.ctrlKey || event.altKey) {
