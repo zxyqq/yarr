@@ -53,6 +53,9 @@ var shortcutFunctions = {
   },
   focusSearch: function() {
     var input = document.getElementById("searchbar")
+    input.value = ''
+    var ev = new Event('input', {bubbles: true})
+    input.dispatchEvent(ev)
     input.focus()
     input.select()
   },
