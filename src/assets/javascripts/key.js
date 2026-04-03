@@ -160,6 +160,17 @@ document.addEventListener('keydown',function(event) {
     return
   }
 
+  // Handle Alt+J/K for next/previous feed
+  if (event.altKey && (event.key === 'j' || event.key === 'k')) {
+    event.preventDefault()
+    if (event.key === 'j') {
+      shortcutFunctions.nextFeed()
+    } else {
+      shortcutFunctions.previousFeed()
+    }
+    return
+  }
+
   // Ignore while focused on text or
   // when using modifier keys (to not clash with browser behaviour)
   if (isTextBox(event.target) || event.metaKey || event.ctrlKey || event.altKey) {
