@@ -12,6 +12,8 @@
                 "YARR_DB": "${workspaceFolder}/yarr.db"
             },
             "args": [],
+            // 编译时强制禁用优化和内联，保证调试信息完整
+            "buildFlags": "-gcflags='all=-N -l'",
             "showLog": true
         }
     ]

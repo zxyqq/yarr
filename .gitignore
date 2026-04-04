@@ -7,4 +7,4 @@
 *.syso
 versioninfo.rc
 .DS_Store
-/cmd/yarr/__debug_bin.exe
+/cmd/yarr/__debug_bin*
