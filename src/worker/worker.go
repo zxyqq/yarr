@@ -30,13 +30,14 @@ func (w *Worker) FeedsPending() int32 {
 
 func (w *Worker) StartFeedCleaner() {
 	go w.db.DeleteOldItems()
-	ticker := time.NewTicker(time.Hour * 24)
-	go func() {
-		for {
-			<-ticker.C
-			w.db.DeleteOldItems()
-		}
-	}()
+	// 每天启动时清理，不需要24小时定时触发
+	// ticker := time.NewTicker(time.Hour * 24)
+	// go func() {
+	// 	for {
+	// 		<-ticker.C
+	// 		w.db.DeleteOldItems()
+	// 	}
+	// }()
 }
 
 func (w *Worker) FindFavicons() {
