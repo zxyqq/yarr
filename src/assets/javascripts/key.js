@@ -92,6 +92,15 @@ var shortcutFunctions = {
   showStarred() {
     vm.filterSelected = 'starred'
   },
+  showAllFeeds() {
+    vm.feedSelected = ''
+    vm.$nextTick(function() {
+      var scroll = document.getElementById('feed-list-scroll')
+      var handle = scroll.querySelector('input[type=radio]:checked')
+      var target = handle && handle.parentElement
+      if (target && scroll) scrollto(target, scroll)
+    })
+  },
 }
 
 // If you edit, make sure you update the help modal
@@ -119,6 +128,7 @@ var keybindings = {
   "q": shortcutFunctions.showUnread,
   "w": shortcutFunctions.showStarred,
   "e": shortcutFunctions.showAll,
+  "a": shortcutFunctions.showAllFeeds,
 }
 
 var codebindings = {
@@ -146,6 +156,7 @@ var codebindings = {
   "KeyQ": shortcutFunctions.showUnread,
   "KeyW": shortcutFunctions.showStarred,
   "KeyE": shortcutFunctions.showAll,
+  "KeyA": shortcutFunctions.showAllFeeds,
 }
 
 function isTextBox(element) {
