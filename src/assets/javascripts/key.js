@@ -111,11 +111,14 @@ var keybindings = {
   "h": shortcutFunctions.previousFeed,
   "f": shortcutFunctions.scrollForward,
   "b": shortcutFunctions.scrollBackward,
-  "q": shortcutFunctions.closeItem,
+  // "q": shortcutFunctions.closeItem,
   "g": shortcutFunctions.toggleItemRead,
   "1": shortcutFunctions.showUnread,
   "2": shortcutFunctions.showStarred,
   "3": shortcutFunctions.showAll,
+  "q": shortcutFunctions.showUnread,
+  "w": shortcutFunctions.showStarred,
+  "e": shortcutFunctions.showAll,
 }
 
 var codebindings = {
@@ -132,7 +135,7 @@ var codebindings = {
   "KeyH": shortcutFunctions.previousFeed,
   "KeyF": shortcutFunctions.scrollForward,
   "KeyB": shortcutFunctions.scrollBackward,
-  "KeyQ": shortcutFunctions.closeItem,
+  // "KeyQ": shortcutFunctions.closeItem,
   "KeyG": shortcutFunctions.toggleItemRead,
   "KeyR": shortcutFunctions.refreshFeeds,
   "KeySlash": shortcutFunctions.openShortcuts,
@@ -140,6 +143,9 @@ var codebindings = {
   "Digit1": shortcutFunctions.showUnread,
   "Digit2": shortcutFunctions.showStarred,
   "Digit3": shortcutFunctions.showAll,
+  "KeyQ": shortcutFunctions.showUnread,
+  "KeyW": shortcutFunctions.showStarred,
+  "KeyE": shortcutFunctions.showAll,
 }
 
 function isTextBox(element) {
