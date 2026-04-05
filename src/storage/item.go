@@ -178,14 +178,9 @@ func listQueryPredicate(filter ItemFilter, newestFirst bool) (string, []interfac
 		args = append(args, *filter.Status)
 	}
 	if filter.Search != nil {
-		words := strings.Fields(*filter.Search)
-		terms := make([]string, len(words))
-		for idx, word := range words {
-			terms[idx] = word + "*"
-		}
-
-		cond = append(cond, "i.search_rowid in (select rowid from search where search match ?)")
-		args = append(args, strings.Join(terms, " "))
+		term := *filter.Search
+		cond = append(cond, "(i.title LIKE '%' || ? || '%' OR i.content LIKE '%' || ? || '%')")
+		args = append(args, term, term)
 	}
 	if filter.After != nil {
 		compare := ">"
