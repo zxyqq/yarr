@@ -35,8 +35,8 @@ func (c *Client) getConditional(url, lastModified, etag string) (*http.Response,
 var client *Client
 
 // 固化代理配置 - 请根据需要修改这些值
-const proxyURL = "http://127.0.0.1:17890"          // 替换为你的代理地址
-var domainList = []string{"rsshub.rssforever.com"} // 替换为需要使用代理的域名列表
+const proxyURL = "http://127.0.0.1:17890"                        // 替换为你的代理地址
+var domainList = []string{"rsshub.rssforever.com", "github.com"} // 替换为需要使用代理的域名列表
 
 // 代理函数：匹配域名列表时使用指定代理，否则使用环境变量代理
 func getProxyFunc(proxyURL string, domains []string) func(*http.Request) (*url.URL, error) {
