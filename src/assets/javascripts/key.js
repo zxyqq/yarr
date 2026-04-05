@@ -126,8 +126,8 @@ var keybindings = {
   "2": shortcutFunctions.showStarred,
   "3": shortcutFunctions.showAll,
   "q": shortcutFunctions.showUnread,
-  "w": shortcutFunctions.showStarred,
-  "e": shortcutFunctions.showAll,
+  // "w": shortcutFunctions.showStarred,
+  // "e": shortcutFunctions.showAll,
   "a": shortcutFunctions.showAllFeeds,
 }
 
@@ -154,8 +154,8 @@ var codebindings = {
   "Digit2": shortcutFunctions.showStarred,
   "Digit3": shortcutFunctions.showAll,
   "KeyQ": shortcutFunctions.showUnread,
-  "KeyW": shortcutFunctions.showStarred,
-  "KeyE": shortcutFunctions.showAll,
+  // "KeyW": shortcutFunctions.showStarred,
+  // "KeyE": shortcutFunctions.showAll,
   "KeyA": shortcutFunctions.showAllFeeds,
 }
 
