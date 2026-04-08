@@ -419,6 +419,11 @@ var vm = new Vue({
     updateMetaTheme: function(theme) {
       document.querySelector("meta[name='theme-color']").content = this.themeColors[theme]
     },
+    openItemLinkRightClick: function(item) {
+      if (item && item.link) {
+        window.open(item.link, '_blank', 'noopener,noreferrer')
+      }
+    },
     refreshStats: function(loopMode) {
       return api.status().then(function(data) {
         if (loopMode && !vm.itemSelected) vm.refreshItems()
