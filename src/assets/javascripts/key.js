@@ -194,7 +194,8 @@ document.addEventListener('keydown',function(event) {
   if (isTextBox(event.target) || event.metaKey || event.ctrlKey || event.altKey) {
     return
   }
-  var keybindFunction = keybindings[event.key] || codebindings[event.code]
+  // var keybindFunction = keybindings[event.key] || codebindings[event.code]
+  var keybindFunction = keybindings[event.key]
   if (keybindFunction) {
     event.preventDefault()
     keybindFunction()
