@@ -396,7 +396,7 @@ func (s *Storage) SyncSearch() {
 
 var (
 	itemsKeepSize = 50
-	itemsKeepDays = 30
+	itemsKeepDays = 90
 )
 
 // Delete old articles from the database to cleanup space.

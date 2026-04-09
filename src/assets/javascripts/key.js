@@ -129,6 +129,7 @@ var keybindings = {
   // "w": shortcutFunctions.showStarred,
   // "e": shortcutFunctions.showAll,
   "a": shortcutFunctions.showAllFeeds,
+  "A": shortcutFunctions.markAllRead,
 }
 
 var codebindings = {
@@ -156,7 +157,7 @@ var codebindings = {
   "KeyQ": shortcutFunctions.showUnread,
   // "KeyW": shortcutFunctions.showStarred,
   // "KeyE": shortcutFunctions.showAll,
-  "KeyA": shortcutFunctions.showAllFeeds,
+  // "KeyA": shortcutFunctions.showAllFeeds,
 }
 
 function isTextBox(element) {
