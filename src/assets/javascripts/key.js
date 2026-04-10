@@ -140,6 +140,7 @@ var keybindings = {
   // "e": shortcutFunctions.showAll,
   "a": shortcutFunctions.showAllFeeds,
   "A": shortcutFunctions.markAllRead,
+  "x": shortcutFunctions.toggleAllFolders,
   "c": shortcutFunctions.toggleAllFolders,
 }
 
