@@ -101,6 +101,18 @@ var shortcutFunctions = {
       if (target && scroll) scrollto(target, scroll)
     })
   },
+  collapseAllFolders() {
+    vm.folders.forEach(function(folder) {
+      folder.is_expanded = false
+      api.folders.update(folder.id, {is_expanded: false})
+    })
+  },
+  expandAllFolders() {
+    vm.folders.forEach(function(folder) {
+      folder.is_expanded = true
+      api.folders.update(folder.id, {is_expanded: true})
+    })
+  },
 }
 
 // If you edit, make sure you update the help modal
@@ -130,6 +142,8 @@ var keybindings = {
   // "e": shortcutFunctions.showAll,
   "a": shortcutFunctions.showAllFeeds,
   "A": shortcutFunctions.markAllRead,
+  "c": shortcutFunctions.collapseAllFolders,
+  "e": shortcutFunctions.expandAllFolders,
 }
 
 var codebindings = {
@@ -158,6 +172,8 @@ var codebindings = {
   // "KeyW": shortcutFunctions.showStarred,
   // "KeyE": shortcutFunctions.showAll,
   // "KeyA": shortcutFunctions.showAllFeeds,
+  "KeyC": shortcutFunctions.collapseAllFolders,
+  "KeyE": shortcutFunctions.expandAllFolders,
 }
 
 function isTextBox(element) {
