@@ -153,7 +153,7 @@
                                   @click.prevent="toggleFolderExpanded(folder)">
                                 {% inline "chevron-right.svg" %}
                             </span>
-                            <span class="flex-fill text-left text-truncate">{{ folder.title }}</span>
+                            <span class="flex-fill text-left text-truncate" :class="{'font-weight-bold': filteredFolderStats[folder.id]}">{{ folder.title }}</span>
                             <span class="counter text-right">{{ filteredFolderStats[folder.id] || '' }}</span>
                         </div>
                     </label>
@@ -165,7 +165,7 @@
                             <div class="selectgroup-label d-flex align-items-center w-100">
                                 <span class="icon mr-2" v-if="!feed.has_icon">{% inline "rss.svg" %}</span>
                                 <span class="icon mr-2" v-else><img :src="'./api/feeds/'+feed.id+'/icon'" alt="" loading="lazy"></span>
-                                <span class="flex-fill text-left text-truncate">{{ feed.title }}</span>
+                                <span class="flex-fill text-left text-truncate" :class="{'font-weight-bold': feedStats[feed.id] && feedStats[feed.id].unread}">{{ feed.title }}</span>
                                 <span class="counter text-right">{{ filteredFeedStats[feed.id] || '' }}</span>
                                 <span class="icon flex-shrink-0 mx-2"
                                       :title="feed_errors[feed.id]"
@@ -292,7 +292,7 @@
                             </small>
                             <small class="flex-shrink-0"><relative-time v-bind:title="formatDate(item.date)" :val="item.date"/></small>
                         </div>
-                        <div>{{ item.title || 'untitled' }}</div>
+                        <div :class="{'font-weight-bold': item.status=='unread'}">{{ item.title || 'untitled' }}</div>
                     </div>
                 </label>
                 <button class="btn btn-link btn-block loading my-3" v-if="itemsHasMore"></button>
