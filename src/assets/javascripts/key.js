@@ -154,6 +154,13 @@ var keybindings = {
   "}": function() { shortcutFunctions.resizeItemList(50) },
 }
 
+var altBindings = {
+  'j': shortcutFunctions.nextFeed,
+  'k': shortcutFunctions.previousFeed,
+  '[': function() { shortcutFunctions.resizeItemList(-30) },
+  ']': function() { shortcutFunctions.resizeItemList(30) },
+}
+
 var codebindings = {
   "KeyO": shortcutFunctions.openItemLink,
   "KeyV": shortcutFunctions.openItemLink,
@@ -201,15 +208,14 @@ document.addEventListener('keydown',function(event) {
     return
   }
 
-  // Handle Alt+J/K for next/previous feed
-  if (event.altKey && (event.key === 'j' || event.key === 'k')) {
-    event.preventDefault()
-    if (event.key === 'j') {
-      shortcutFunctions.nextFeed()
-    } else {
-      shortcutFunctions.previousFeed()
+  // Handle Alt+key shortcuts
+  if (event.altKey && !event.ctrlKey && !event.metaKey) {
+    var altFn = altBindings[event.key]
+    if (altFn) {
+      event.preventDefault()
+      altFn()
+      return
     }
-    return
   }
 
   // Ignore while focused on text or
