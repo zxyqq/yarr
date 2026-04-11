@@ -111,6 +111,12 @@ var shortcutFunctions = {
       api.folders.update(folder.id, {is_expanded: newState})
     })
   },
+  resizeFeedList(delta) {
+    vm.resizeFeedList(vm.feedListWidth + delta)
+  },
+  resizeItemList(delta) {
+    vm.resizeItemList(vm.itemListWidth + delta)
+  },
 }
 
 // If you edit, make sure you update the help modal
@@ -142,6 +148,10 @@ var keybindings = {
   "A": shortcutFunctions.markAllRead,
   "x": shortcutFunctions.toggleAllFolders,
   "c": shortcutFunctions.toggleAllFolders,
+  "[": function() { shortcutFunctions.resizeFeedList(-50) },
+  "]": function() { shortcutFunctions.resizeFeedList(50) },
+  "{": function() { shortcutFunctions.resizeItemList(-50) },
+  "}": function() { shortcutFunctions.resizeItemList(50) },
 }
 
 var codebindings = {
