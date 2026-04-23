@@ -135,7 +135,7 @@ var keybindings = {
   "l": shortcutFunctions.nextFeed,
   "h": shortcutFunctions.previousFeed,
   "f": shortcutFunctions.scrollForward,
-  "b": shortcutFunctions.scrollBackward,
+  "F": shortcutFunctions.scrollBackward,
   // "q": shortcutFunctions.closeItem,
   "g": shortcutFunctions.toggleItemRead,
   "1": shortcutFunctions.showUnread,
