@@ -111,6 +111,23 @@ var shortcutFunctions = {
       api.folders.update(folder.id, {is_expanded: newState})
     })
   },
+  toggleCurrentFolder() {
+    var current = vm.current
+    if (current.type === 'folder') {
+      var folder = current.folder
+      folder.is_expanded = !folder.is_expanded
+      api.folders.update(folder.id, {is_expanded: folder.is_expanded})
+    } else if (current.type === 'feed') {
+      var feed = current.feed
+      if (feed.folder_id) {
+        var folder = vm.foldersById[feed.folder_id]
+        if (folder) {
+          folder.is_expanded = !folder.is_expanded
+          api.folders.update(folder.id, {is_expanded: folder.is_expanded})
+        }
+      }
+    }
+  },
   resizeFeedList(delta) {
     vm.resizeFeedList(vm.feedListWidth + delta)
   },
@@ -147,8 +164,10 @@ var keybindings = {
   // "w": shortcutFunctions.showStarred,
   "a": shortcutFunctions.showAllFeeds,
   "A": shortcutFunctions.markAllRead,
-  "x": shortcutFunctions.toggleAllFolders,
-  "c": shortcutFunctions.toggleAllFolders,
+  "x": shortcutFunctions.toggleCurrentFolder,
+  "c": shortcutFunctions.toggleCurrentFolder,
+  "C": shortcutFunctions.toggleAllFolders,
+  "X": shortcutFunctions.toggleAllFolders,
   "[": function() { shortcutFunctions.resizeFeedList(-50) },
   "]": function() { shortcutFunctions.resizeFeedList(50) },
   "{": function() { shortcutFunctions.resizeItemList(-50) },
@@ -188,7 +207,7 @@ var codebindings = {
   // "KeyW": shortcutFunctions.showStarred,
   // "KeyE": shortcutFunctions.showAll,
   // "KeyA": shortcutFunctions.showAllFeeds,
-  "KeyC": shortcutFunctions.toggleAllFolders,
+  "KeyC": shortcutFunctions.toggleCurrentFolder,
 }
 
 function isTextBox(element) {
