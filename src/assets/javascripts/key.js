@@ -156,14 +156,14 @@ var keybindings = {
   "e": shortcutFunctions.scrollBackward,
   // "e": shortcutFunctions.showAll,
   // "q": shortcutFunctions.closeItem,
-  "g": shortcutFunctions.toggleItemRead,
+  "u": shortcutFunctions.toggleItemRead,
   "1": shortcutFunctions.showUnread,
   "2": shortcutFunctions.showStarred,
   "3": shortcutFunctions.showAll,
   "q": shortcutFunctions.showUnread,
   // "w": shortcutFunctions.showStarred,
-  "a": shortcutFunctions.showAllFeeds,
-  "A": shortcutFunctions.markAllRead,
+  "A": shortcutFunctions.showAllFeeds,
+  "a": shortcutFunctions.markAllRead,
   "x": shortcutFunctions.toggleCurrentFolder,
   "c": shortcutFunctions.toggleCurrentFolder,
   "C": shortcutFunctions.toggleAllFolders,
@@ -243,6 +243,17 @@ document.addEventListener('keydown',function(event) {
   if (isTextBox(event.target) || event.metaKey || event.ctrlKey || event.altKey) {
     return
   }
+  // Handle Space / Shift+Space for scrolling
+  if (event.key === ' ') {
+    event.preventDefault()
+    if (event.shiftKey) {
+      shortcutFunctions.scrollBackward()
+    } else {
+      shortcutFunctions.scrollForward()
+    }
+    return
+  }
+
   // var keybindFunction = keybindings[event.key] || codebindings[event.code]
   var keybindFunction = keybindings[event.key]
   if (keybindFunction) {
