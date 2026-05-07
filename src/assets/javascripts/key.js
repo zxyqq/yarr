@@ -126,6 +126,8 @@ var shortcutFunctions = {
           api.folders.update(folder.id, {is_expanded: folder.is_expanded})
         }
       }
+    } else {
+      shortcutFunctions.toggleAllFolders()
     }
   },
   resizeFeedList(delta) {
