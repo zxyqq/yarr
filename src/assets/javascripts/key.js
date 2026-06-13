@@ -83,6 +83,9 @@ var shortcutFunctions = {
   refreshFeeds: function() {
     vm.fetchAllFeeds()
   },
+  toggleFeedList: function() {
+    vm.toggleFeedList()
+  },
   showAll() {
     vm.filterSelected = ''
   },
@@ -163,7 +166,7 @@ var keybindings = {
   "2": shortcutFunctions.showStarred,
   "3": shortcutFunctions.showAll,
   "q": shortcutFunctions.showUnread,
-  // "w": shortcutFunctions.showStarred,
+  "w": shortcutFunctions.toggleFeedList,
   "A": shortcutFunctions.showAllFeeds,
   "a": shortcutFunctions.markAllRead,
   "x": shortcutFunctions.toggleCurrentFolder,
@@ -206,7 +209,7 @@ var codebindings = {
   "Digit2": shortcutFunctions.showStarred,
   "Digit3": shortcutFunctions.showAll,
   "KeyQ": shortcutFunctions.showUnread,
-  // "KeyW": shortcutFunctions.showStarred,
+  "KeyW": shortcutFunctions.toggleFeedList,
   // "KeyE": shortcutFunctions.showAll,
   // "KeyA": shortcutFunctions.showAllFeeds,
   "KeyC": shortcutFunctions.toggleCurrentFolder,

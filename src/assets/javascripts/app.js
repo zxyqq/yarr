@@ -221,6 +221,7 @@ var vm = new Vue({
       'feeds': [],
       'feedSelected': s.feed,
       'feedListWidth': s.feed_list_width || 300,
+      'feedListVisible': true,
       'feedNewChoice': [],
       'feedNewChoiceSelected': '',
       'items': [],
@@ -708,6 +709,9 @@ var vm = new Vue({
     },
     resizeFeedList: function(width) {
       this.feedListWidth = Math.min(Math.max(200, width), 700)
+    },
+    toggleFeedList: function() {
+      this.feedListVisible = !this.feedListVisible
     },
     resizeItemList: function(width) {
       this.itemListWidth = Math.min(Math.max(200, width), 700)
