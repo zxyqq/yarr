@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch YARR",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/yarr/main.go",
+            "env": {
+                "YARR_ADDR": "127.0.0.1:7070",
+                "YARR_DB": "${workspaceFolder}/yarr.db"
+            },
+            "args": [],
+            "showLog": true
+        }
+    ]
+}

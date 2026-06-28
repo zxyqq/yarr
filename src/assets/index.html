@@ -19,7 +19,7 @@
 <body class="theme-{% .settings.theme_name %}">
     <div id="app" class="d-flex" :class="{'feed-selected': feedSelected !== null, 'item-selected': itemSelected !== null}" v-cloak>
         <!-- feed list -->
-        <div id="col-feed-list" class="vh-100 position-relative d-flex flex-column border-right flex-shrink-0" :style="{width: feedListWidth+'px'}">
+        <div id="col-feed-list" class="vh-100 position-relative d-flex flex-column border-right flex-shrink-0" :style="{width: feedListWidth+'px'}" v-if="feedListVisible">
             <drag :width="feedListWidth" @resize="resizeFeedList"></drag>
             <div class="p-2 toolbar d-flex align-items-center">
                 <div class="icon mx-2">{% inline "anchor.svg" %}</div>
@@ -169,7 +169,7 @@
                                   @click.prevent="toggleFolderExpanded(folder)">
                                 {% inline "chevron-right.svg" %}
                             </span>
-                            <span class="flex-fill text-left text-truncate">{{ folder.title }}</span>
+                            <span class="flex-fill text-left text-truncate" :class="{'font-weight-bold': filteredFolderStats[folder.id]}">{{ folder.title }}</span>
                             <span class="counter text-right">{{ filteredFolderStats[folder.id] || '' }}</span>
                         </div>
                     </label>
@@ -181,7 +181,7 @@
                             <div class="selectgroup-label d-flex align-items-center w-100">
                                 <span class="icon mr-2" v-if="!feed.has_icon">{% inline "rss.svg" %}</span>
                                 <span class="icon mr-2" v-else><img :src="'./api/feeds/'+feed.id+'/icon'" alt="" loading="lazy"></span>
-                                <span class="flex-fill text-left text-truncate">{{ feed.title }}</span>
+                                <span class="flex-fill text-left text-truncate" :class="{'font-weight-bold': feedStats[feed.id] && feedStats[feed.id].unread}">{{ feed.title }}</span>
                                 <span class="counter text-right">{{ filteredFeedStats[feed.id] || '' }}</span>
                                 <span class="icon flex-shrink-0 mx-2"
                                       :title="feed_errors[feed.id]"
@@ -294,7 +294,8 @@
             </div>
             <div id="item-list-scroll" class="p-2 overflow-auto scroll-touch border-top flex-grow-1" v-scroll="loadMoreItems" ref="itemlist">
                 <label v-for="item in items" :key="item.id"
-                       class="selectgroup">
+                       class="selectgroup"
+                       @contextmenu.prevent="openItemLinkRightClick(item)">
                     <input type="radio" name="item" :value="item.id" v-model="itemSelected">
                     <div class="selectgroup-label d-flex flex-column">
                         <div style="line-height: 100%; opacity: .7; margin-bottom: .1rem;" class="d-flex align-items-center">
@@ -307,7 +308,7 @@
                             </small>
                             <small class="flex-shrink-0"><relative-time v-bind:title="formatDate(item.date)" :val="item.date"/></small>
                         </div>
-                        <div>{{ item.title || $t('untitled') }}</div>
+                        <div :class="{'font-weight-bold': item.status=='unread'}">{{ item.title || $t('untitled') }}</div>
                     </div>
                 </label>
                 <button class="btn btn-link btn-block loading my-3" v-if="itemsHasMore"></button>
@@ -434,7 +435,13 @@
                 <table class="table table-borderless table-sm table-compact m-0">
                     <tr><td><kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd></td>
                                                             <td>{{ $t('kb_show_filters') }}</td></tr>
+                    <tr><td><kbd>q</kbd></td>               <td>show unread</td></tr>
+                    <tr><td><kbd>w</kbd></td>               <td>toggle feed navigation</td></tr>
+                    <tr><td><kbd>a</kbd></td>               <td>go to All Feeds</td></tr>
+                    <tr><td><kbd>c/x</kbd></td>               <td>toggle collapse / expand all folders</td></tr>
+                    <tr><td><kbd>?</kbd></td>               <td>show keyboard shortcuts</td></tr>
                     <tr><td><kbd>/</kbd></td>               <td>{{ $t('kb_focus_search') }}</td></tr>
+                    <tr><td><kbd>Esc</kbd></td>             <td>close modal or article</td></tr>
 
                     <tr><td colspan=2>&nbsp;</td></tr>
                     <tr><td><kbd>j</kbd> <kbd>k</kbd></td>  <td>{{ $t('kb_next_prev_article') }}</td></tr>
@@ -443,12 +450,20 @@
 
                     <tr><td colspan=2>&nbsp;</td></tr>
                     <tr><td><kbd>R</kbd></td>               <td>{{ $t('kb_mark_all_read') }}</td></tr>
-                    <tr><td><kbd>r</kbd></td>               <td>{{ $t('kb_mark_read') }}</td></tr>
+                    <tr><td><kbd>r</kbd></td>               <td>refresh feeds</td></tr>
+                    <tr><td><kbd>g</kbd></td>               <td>{{ $t('kb_mark_read') }}</td></tr>
                     <tr><td><kbd>s</kbd></td>               <td>{{ $t('kb_mark_starred') }}</td></tr>
                     <tr><td><kbd>o</kbd></td>               <td>{{ $t('kb_open_link') }}</td></tr>
+                    <tr><td><kbd>v</kbd></td>               <td>open link</td></tr>
                     <tr><td><kbd>i</kbd></td>               <td>{{ $t('kb_read_here') }}</td> </tr>
-                    <tr><td><kbd>f</kbd> <kbd>b</kbd></td>  <td>{{ $t('kb_scroll_content') }}</td>
-                    </tr>
+                    <tr><td><kbd>f</kbd> <kbd>b</kbd></td>  <td>{{ $t('kb_scroll_content') }}</td></tr>
+                    <tr><td><kbd>Space</kbd> <kbd>Shift+Space</kbd></td>  <td>scroll content forward / backward</td></tr>
+
+                    <tr><td colspan=2>&nbsp;</td></tr>
+                    <tr><td><kbd>Alt+←</kbd> <kbd>Alt+→</kbd></td>  <td>decrease / increase feed list width</td></tr>
+                    <tr><td><kbd>Alt+[</kbd> <kbd>Alt+]</kbd></td>  <td>decrease / increase item list width</td></tr>
+                    <tr><td><kbd>[</kbd> <kbd>]</kbd></td>  <td>decrease / increase feed list width</td></tr>
+                    <tr><td><kbd>{</kbd> <kbd>}</kbd></td>  <td>decrease / increase item list width</td></tr>
                 </table>
             </div>
         </modal>
