@@ -10,6 +10,7 @@ import (
 	"slices"
 	"strings"
 	"time"
+	"unicode"
 
 	"github.com/nkanaev/yarr/src/storage/model"
 )
@@ -87,6 +88,15 @@ func (s *SQLiteStorage) CreateItems(items []model.Item) bool {
 	return true
 }
 
+func containsNonASCII(s string) bool {
+	for _, r := range s {
+		if r > unicode.MaxASCII {
+			return true
+		}
+	}
+	return false
+}
+
 func listQueryPredicate(filter model.ItemFilter, newestFirst bool) (string, []any) {
 	cond := make([]string, 0)
 	args := make([]any, 0)
@@ -104,16 +114,34 @@ func listQueryPredicate(filter model.ItemFilter, newestFirst bool) (string, []an
 	}
 	if filter.Search != nil {
 		words := strings.Fields(*filter.Search)
-		terms := make([]string, len(words))
-		for idx, word := range words {
-			terms[idx] = word + "*"
+		ftsTerms := make([]string, 0, len(words))
+		likeTerms := make([]string, 0)
+		for _, word := range words {
+			if containsNonASCII(word) {
+				// CJK and other non-ASCII substrings: FTS tokenization
+				// doesn't handle them well, fall back to substring match
+				likeTerms = append(likeTerms, word)
+			} else {
+				ftsTerms = append(ftsTerms, word+"*")
+			}
 		}
-
-		cond = append(
-			cond,
-			"i.id in (select rowid as id from search where search match :search)",
-		)
-		args = append(args, sql.Named("search", strings.Join(terms, " ")))
+		if len(ftsTerms) > 0 {
+			cond = append(
+				cond,
+				"i.id in (select rowid as id from search where search match :search)",
+			)
+			args = append(args, sql.Named("search", strings.Join(ftsTerms, " ")))
+		}
+		for i, term := range likeTerms {
+			cond = append(
+				cond,
+				fmt.Sprintf(
+					"(i.title LIKE '%%' || :like%d || '%%' OR i.content LIKE '%%' || :like%d || '%%')",
+					i, i,
+				),
+			)
+			args = append(args, sql.Named(fmt.Sprintf("like%d", i), term))
+		}
 	}
 	if filter.After != nil {
 		compare := ">"

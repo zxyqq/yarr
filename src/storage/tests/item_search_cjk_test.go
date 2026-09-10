@@ -1,24 +1,32 @@
-package storage
+package tests
 
 import (
+	"path/filepath"
 	"reflect"
 	"testing"
 	"time"
+
+	"github.com/nkanaev/yarr/src/storage"
+	"github.com/nkanaev/yarr/src/storage/model"
 )
 
 func TestSearchChinese(t *testing.T) {
-	db := testDB()
+	db, err := storage.New(filepath.Join(t.TempDir(), "test.db"))
+	if err != nil {
+		t.Fatal(err)
+	}
 
-	feed := db.CreateFeed("test", "", "", "http://test.com/feed.xml", nil)
+	feed := db.CreateFeed(model.CreateFeedParams{Title: "test", FeedLink: "http://test.com/feed.xml"})
 	now := time.Now()
 
 	// The exact title from the user's example
 	title := "Prompt、Agent、Skill、MCP 到底是啥？用一家饭馆的后厨给你讲透 - it排球君 - 博客园"
-	db.CreateItems([]Item{
+	ok := db.CreateItems([]model.Item{
 		{GUID: "item1", FeedId: feed.Id, Title: title, Content: "测试内容", Date: now},
 	})
-
-	db.SyncSearch()
+	if !ok {
+		t.Fatal("failed to create item")
+	}
 
 	tests := []struct {
 		name    string
@@ -41,7 +49,7 @@ func TestSearchChinese(t *testing.T) {
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			search := tc.search
-			have := getItemGuids(db.ListItems(ItemFilter{Search: &search}, 10, false, false))
+			have := getItemGuids(db.ListItems(model.ItemFilter{Search: &search}, 10, false, false))
 			if !reflect.DeepEqual(have, tc.wantIDs) {
 				t.Errorf("search %q: want %v, have %v", tc.search, tc.wantIDs, have)
 			}
