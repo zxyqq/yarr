@@ -1,3 +1,5 @@
+.codegraph/
+/.claude/settings.local.json
 /_output
 /out
 /yarr
@@ -8,3 +10,4 @@
 versioninfo.rc
 .DS_Store
 node_modules/
+/cmd/yarr/__debug_bin*

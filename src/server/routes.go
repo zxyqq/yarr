@@ -325,6 +325,11 @@ func (s *Server) handleItem(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
+		// generate full title for items without one (no truncation for article view)
+		if item.Title == "" {
+			item.Title = htmlutil.ExtractText(item.Content)
+		}
+
 		item.Content = sanitizer.Sanitize(item.Link, item.Content)
 		for i, link := range item.MediaLinks {
 			item.MediaLinks[i].Description = sanitizer.Sanitize(item.Link, link.Description)
@@ -382,7 +387,7 @@ func (s *Server) handleItemList(w http.ResponseWriter, r *http.Request) {
 		for i, item := range items {
 			if item.Title == "" {
 				text := htmlutil.ExtractText(item.Content)
-				items[i].Title = htmlutil.TruncateText(text, 140)
+				items[i].Title = htmlutil.TruncateText(text, 280)
 			}
 		}
 		writeJSON(w, http.StatusOK, map[string]any{
