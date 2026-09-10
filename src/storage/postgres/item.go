@@ -47,7 +47,7 @@ func (s *PostgresStorage) CreateItems(items []model.Item) bool {
 	})
 
 	for _, item := range items {
-		searchText := item.Title + " " + htmlutil.ExtractText(item.Content)
+		searchText := item.Title + " " + htmlutil.SearchableText(item.Content)
 		_, err = tx.Exec(`
 			insert into items (
 				guid, feed_id, title, link, date,

@@ -498,6 +498,12 @@ func TestSearch(t *testing.T) {
 				Title:   "Hidden Tag",
 				Content: `<div class="secret-class">Don't find me by my class name</div>`,
 			},
+			{
+				GUID:    "i4",
+				FeedId:  feed.Id,
+				Title:   "Link Only",
+				Content: `<p>See the announcement.</p><a href="https://github.com/dbcli/mycli/issues/2048">link</a>`,
+			},
 		})
 
 		itemsByGUID := make(map[string]model.Item)
@@ -523,6 +529,14 @@ func TestSearch(t *testing.T) {
 		have = getItemGuids(db.ListItems(model.ItemFilter{Search: &s3}, 10, true, false))
 		if len(have) > 0 {
 			t.Errorf("html tag search should have failed but found: %v", have)
+		}
+
+		// 2b. href/src values stay searchable even when the term only
+		// appears inside the URL
+		sLink := "mycli"
+		have = getItemGuids(db.ListItems(model.ItemFilter{Search: &sLink}, 10, true, false))
+		if !reflect.DeepEqual(have, []string{"i4"}) {
+			t.Errorf("link url search failed: expected [i4], got %v", have)
 		}
 
 		// 3. Multi-word (AND)

@@ -12,7 +12,10 @@ import (
 func init() {
 	sql.Register("sqlite3_yarr", &sqlite3.SQLiteDriver{
 		ConnectHook: func(conn *sqlite3.SQLiteConn) error {
-			return conn.RegisterFunc("strip_html", htmlutil.ExtractText, true)
+			if err := conn.RegisterFunc("strip_html", htmlutil.ExtractText, true); err != nil {
+				return err
+			}
+			return conn.RegisterFunc("searchable", htmlutil.SearchableText, true)
 		},
 	})
 }

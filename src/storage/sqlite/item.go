@@ -113,13 +113,14 @@ func listQueryPredicate(filter model.ItemFilter, newestFirst bool) (string, []an
 		args = append(args, sql.Named("status", *filter.Status))
 	}
 	if filter.Search != nil {
+		// ASCII terms use the FTS index (built over searchable(content), so
+		// link URLs are included). Non-ASCII terms (e.g. CJK) are not
+		// tokenized well by FTS and fall back to substring match.
 		words := strings.Fields(*filter.Search)
 		ftsTerms := make([]string, 0, len(words))
 		likeTerms := make([]string, 0)
 		for _, word := range words {
 			if containsNonASCII(word) {
-				// CJK and other non-ASCII substrings: FTS tokenization
-				// doesn't handle them well, fall back to substring match
 				likeTerms = append(likeTerms, word)
 			} else {
 				ftsTerms = append(ftsTerms, word+"*")
@@ -136,7 +137,7 @@ func listQueryPredicate(filter model.ItemFilter, newestFirst bool) (string, []an
 			cond = append(
 				cond,
 				fmt.Sprintf(
-					"(i.title LIKE '%%' || :like%d || '%%' OR i.content LIKE '%%' || :like%d || '%%')",
+					"(i.title LIKE '%%' || :like%d || '%%' OR searchable(i.content) LIKE '%%' || :like%d || '%%')",
 					i, i,
 				),
 			)

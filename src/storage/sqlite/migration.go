@@ -23,6 +23,7 @@ var migrations = []func(*sql.Tx) error{
 	m13_consolidate_feed_states,
 	m14_upgrade_fts5,
 	m15_update_item_update_trigger,
+	m16_fts_index_searchable,
 }
 
 var maxVersion = int64(len(migrations))
@@ -429,6 +430,39 @@ func m15_update_item_update_trigger(tx *sql.Tx) error {
 		  insert into search(search, rowid, title, content) values('delete', old.id, old.title, strip_html(old.content));
 		  insert into search(rowid, title, content) values (new.id, new.title, strip_html(new.content));
 		end;
+	`)
+	return err
+}
+
+func m16_fts_index_searchable(tx *sql.Tx) error {
+	_, err := tx.Exec(`
+		-- Rebuild the FTS index over searchable(content), which keeps the
+		-- values of href/src attributes so that terms inside link URLs stay
+		-- searchable, while other attributes are still excluded.
+		drop trigger if exists items_ai;
+		drop trigger if exists items_ad;
+		drop trigger if exists items_au;
+		drop table if exists search;
+
+		create virtual table search using fts5(
+			title, content,
+			content='items',
+			content_rowid='id',
+			tokenize='unicode61'
+		);
+
+		create trigger items_ai after insert on items begin
+		  insert into search(rowid, title, content) values (new.id, new.title, searchable(new.content));
+		end;
+		create trigger items_ad after delete on items begin
+		  insert into search(search, rowid, title, content) values('delete', old.id, old.title, searchable(old.content));
+		end;
+		create trigger items_au after update of title, content on items begin
+		  insert into search(search, rowid, title, content) values('delete', old.id, old.title, searchable(old.content));
+		  insert into search(rowid, title, content) values (new.id, new.title, searchable(new.content));
+		end;
+
+		insert into search(rowid, title, content) select id, title, searchable(content) from items;
 	`)
 	return err
 }

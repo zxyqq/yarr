@@ -1,6 +1,26 @@
 package htmlutil
 
-import "testing"
+import (
+	"strings"
+	"testing"
+)
+
+func TestSearchableText(t *testing.T) {
+	content := `<div class="secret-class">hello</div>` +
+		`<a href="https://example.com/dbcli/mycli">a</a>` +
+		`<img src='/img/logo.png'>` +
+		`<script src=app.js></script>`
+
+	have := SearchableText(content)
+	for _, want := range []string{"hello", "https://example.com/dbcli/mycli", "/img/logo.png", "app.js"} {
+		if !strings.Contains(have, want) {
+			t.Errorf("SearchableText() = %q, missing %q", have, want)
+		}
+	}
+	if strings.Contains(have, "secret-class") {
+		t.Errorf("SearchableText() = %q, should not include class names", have)
+	}
+}
 
 func TestExtractText(t *testing.T) {
 	testcases := [][2]string{

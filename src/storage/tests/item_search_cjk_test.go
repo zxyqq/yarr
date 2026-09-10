@@ -15,6 +15,7 @@ func TestSearchChinese(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer db.Close()
 
 	feed := db.CreateFeed(model.CreateFeedParams{Title: "test", FeedLink: "http://test.com/feed.xml"})
 	now := time.Now()
