@@ -868,5 +868,15 @@
     "pt": "Redimensionar lista de feeds/artigos",
     "zh": "调整订阅/文章列表宽度",
     "ru": "Изменить ширину списков"
+  },
+  "kb_refresh_feeds": {
+    "en": "Refresh all feeds",
+    "de": "Alle Feeds aktualisieren",
+    "fr": "Actualiser tous les flux",
+    "es": "Actualizar todos los feeds",
+    "ja": "すべてのフィードを更新",
+    "pt": "Atualizar todos os feeds",
+    "zh": "刷新全部订阅",
+    "ru": "Обновить все ленты"
   }
 }

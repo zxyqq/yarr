@@ -35,15 +35,19 @@
         <div class="w-75">{{ $t("kb_mark_all_read") }}</div>
       </div>
       <div class="d-flex py-1">
-        <div class="w-25"><kbd>r</kbd></div>
+        <div class="w-25"><kbd>u</kbd></div>
         <div class="w-75">{{ $t("kb_mark_read") }}</div>
+      </div>
+      <div class="d-flex py-1">
+        <div class="w-25"><kbd>r</kbd></div>
+        <div class="w-75">{{ $t("kb_refresh_feeds") }}</div>
       </div>
       <div class="d-flex py-1">
         <div class="w-25"><kbd>s</kbd></div>
         <div class="w-75">{{ $t("kb_mark_starred") }}</div>
       </div>
       <div class="d-flex py-1">
-        <div class="w-25"><kbd>o</kbd></div>
+        <div class="w-25"><kbd>o</kbd> <kbd>v</kbd></div>
         <div class="w-75">{{ $t("kb_open_link") }}</div>
       </div>
       <div class="d-flex py-1">
@@ -51,7 +55,7 @@
         <div class="w-75">{{ $t("kb_read_here") }}</div>
       </div>
       <div class="d-flex py-1">
-        <div class="w-25"><kbd>f</kbd> <kbd>b</kbd></div>
+        <div class="w-25"><kbd>f</kbd> <kbd>b</kbd> <kbd>e</kbd></div>
         <div class="w-75">{{ $t("kb_scroll_content") }}</div>
       </div>
 

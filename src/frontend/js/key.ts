@@ -23,8 +23,14 @@ export function setupKeybindings(vm: InstanceType<typeof App>) {
         window.open(vm.itemSelectedDetails.link, "_blank", "noopener,noreferrer");
       }
     },
+    scrollBackwardAlias() {
+      helperFunctions.scrollContent(-1);
+    },
     toggleReadability() {
       vm.toggleReadability();
+    },
+    refreshFeeds() {
+      vm.fetchAllFeeds();
     },
     toggleItemRead() {
       if (vm.itemSelectedDetails !== null) {
@@ -107,8 +113,9 @@ export function setupKeybindings(vm: InstanceType<typeof App>) {
   // If you edit, make sure you update the help modal
   var keybindings = {
     o: shortcutFunctions.openItemLink,
+    v: shortcutFunctions.openItemLink,
     i: shortcutFunctions.toggleReadability,
-    r: shortcutFunctions.toggleItemRead,
+    r: shortcutFunctions.refreshFeeds,
     R: shortcutFunctions.markAllRead,
     s: shortcutFunctions.toggleItemStarred,
     "/": shortcutFunctions.focusSearch,
@@ -118,6 +125,7 @@ export function setupKeybindings(vm: InstanceType<typeof App>) {
     h: shortcutFunctions.previousFeed,
     f: shortcutFunctions.scrollForward,
     b: shortcutFunctions.scrollBackward,
+    e: shortcutFunctions.scrollBackwardAlias,
     q: shortcutFunctions.closeItem,
     "?": shortcutFunctions.showShortcuts,
     "1": shortcutFunctions.showUnread,
@@ -147,8 +155,9 @@ export function setupKeybindings(vm: InstanceType<typeof App>) {
 
   var codebindings = {
     KeyO: shortcutFunctions.openItemLink,
+    KeyV: shortcutFunctions.openItemLink,
     KeyI: shortcutFunctions.toggleReadability,
-    //"r": shortcutFunctions.toggleItemRead,
+    KeyR: shortcutFunctions.refreshFeeds,
     //"KeyR": shortcutFunctions.markAllRead,
     KeyS: shortcutFunctions.toggleItemStarred,
     Slash: shortcutFunctions.focusSearch,
@@ -158,6 +167,7 @@ export function setupKeybindings(vm: InstanceType<typeof App>) {
     KeyH: shortcutFunctions.previousFeed,
     KeyF: shortcutFunctions.scrollForward,
     KeyB: shortcutFunctions.scrollBackward,
+    KeyE: shortcutFunctions.scrollBackwardAlias,
     KeyQ: shortcutFunctions.closeItem,
     Digit1: shortcutFunctions.showUnread,
     Digit2: shortcutFunctions.showStarred,
