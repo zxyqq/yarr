@@ -28,6 +28,8 @@ func (s *PostgresStorage) GetSettings() model.Settings {
 			json.Unmarshal(val, &result.Feed)
 		case "feed_list_width":
 			json.Unmarshal(val, &result.FeedListWidth)
+		case "feed_list_visible":
+			json.Unmarshal(val, &result.FeedListVisible)
 		case "item_list_width":
 			json.Unmarshal(val, &result.ItemListWidth)
 		case "sort_newest_first":
@@ -78,6 +80,9 @@ func (s *PostgresStorage) UpdateSettings(params model.UpdateSettingsParams) bool
 	}
 	if params.FeedListWidth != nil {
 		errs = append(errs, update("feed_list_width", *params.FeedListWidth))
+	}
+	if params.FeedListVisible != nil {
+		errs = append(errs, update("feed_list_visible", *params.FeedListVisible))
 	}
 	if params.ItemListWidth != nil {
 		errs = append(errs, update("item_list_width", *params.ItemListWidth))

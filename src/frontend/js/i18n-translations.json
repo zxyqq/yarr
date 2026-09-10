@@ -808,5 +808,65 @@
     "pt": "Falha ao carregar legibilidade",
     "zh": "阅读模式加载失败",
     "ru": "Не удалось загрузить читаемый режим"
+  },
+  "kb_toggle_feed_list": {
+    "en": "Show/hide feed list",
+    "de": "Feedliste ein-/ausblenden",
+    "fr": "Afficher/masquer la liste des flux",
+    "es": "Mostrar/ocultar la lista de feeds",
+    "ja": "フィードリストの表示切り替え",
+    "pt": "Mostrar/ocultar lista de feeds",
+    "zh": "显示/隐藏订阅列表",
+    "ru": "Показать/скрыть список лент"
+  },
+  "kb_mark_all_read_everywhere": {
+    "en": "Mark everything as read",
+    "de": "Alles als gelesen markieren",
+    "fr": "Tout marquer comme lu",
+    "es": "Marcar todo como leído",
+    "ja": "すべて既読にする",
+    "pt": "Marcar tudo como lido",
+    "zh": "全部标记为已读",
+    "ru": "Отметить всё как прочитанное"
+  },
+  "kb_show_all_feeds": {
+    "en": "Show all feeds (Go to all articles view)",
+    "de": "Alle Feeds anzeigen (Ansicht «Alle Artikel»)",
+    "fr": "Afficher tous les flux (vue «Tous les articles»)",
+    "es": "Mostrar todos los feeds (vista «Todos los artículos»)",
+    "ja": "すべてのフィードを表示（全記事ビューへ）",
+    "pt": "Mostrar todos os feeds (visão «Todos os artigos»)",
+    "zh": "回到全部文章视图",
+    "ru": "Показать все ленты (вид «Все статьи»)"
+  },
+  "kb_toggle_current_folder": {
+    "en": "Collapse/expand current folder",
+    "de": "Aktuellen Ordner auf-/zuklappen",
+    "fr": "Réplier/déplier le dossier courant",
+    "es": "Plegar/desplegar la carpeta actual",
+    "ja": "現在のフォルダを開閉する",
+    "pt": "Recolher/expandir a pasta atual",
+    "zh": "展开/收起当前文件夹",
+    "ru": "Свернуть/развернуть текущую папку"
+  },
+  "kb_toggle_all_folders": {
+    "en": "Collapse/expand all folders",
+    "de": "Alle Ordner auf-/zuklappen",
+    "fr": "Réplier/déplier tous les dossiers",
+    "es": "Plegar/desplegar todas las carpetas",
+    "ja": "すべてのフォルダを開閉する",
+    "pt": "Recolher/expandir todas as pastas",
+    "zh": "全部文件夹收起/展开",
+    "ru": "Свернуть/развернуть все папки"
+  },
+  "kb_resize_columns": {
+    "en": "Resize feed/item list",
+    "de": "Feed-/Artikelliste in der Breite anpassen",
+    "fr": "Redimensionner la liste des flux/articles",
+    "es": "Redimensionar lista de feeds/artículos",
+    "ja": "フィード/記事リストの幅を調整",
+    "pt": "Redimensionar lista de feeds/artigos",
+    "zh": "调整订阅/文章列表宽度",
+    "ru": "Изменить ширину списков"
   }
 }

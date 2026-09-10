@@ -165,6 +165,7 @@ type Settings struct {
 	Filter          string  `json:"filter"`
 	Feed            string  `json:"feed"`
 	FeedListWidth   int     `json:"feed_list_width"`
+	FeedListVisible bool    `json:"feed_list_visible"`
 	ItemListWidth   int     `json:"item_list_width"`
 	SortNewestFirst bool    `json:"sort_newest_first"`
 	ThemeName       string  `json:"theme_name"`
@@ -178,6 +179,7 @@ type UpdateSettingsParams struct {
 	Filter          *string  `json:"filter"`
 	Feed            *string  `json:"feed"`
 	FeedListWidth   *int     `json:"feed_list_width"`
+	FeedListVisible *bool    `json:"feed_list_visible"`
 	ItemListWidth   *int     `json:"item_list_width"`
 	SortNewestFirst *bool    `json:"sort_newest_first"`
 	ThemeName       *string  `json:"theme_name"`
@@ -192,6 +194,7 @@ func (s Settings) Map() map[string]any {
 		"filter":            s.Filter,
 		"feed":              s.Feed,
 		"feed_list_width":   s.FeedListWidth,
+		"feed_list_visible": s.FeedListVisible,
 		"item_list_width":   s.ItemListWidth,
 		"sort_newest_first": s.SortNewestFirst,
 		"theme_name":        s.ThemeName,
@@ -207,6 +210,7 @@ func SettingsDefault() Settings {
 		Filter:          "",
 		Feed:            "",
 		FeedListWidth:   300,
+		FeedListVisible: true,
 		ItemListWidth:   300,
 		SortNewestFirst: true,
 		ThemeName:       "light",

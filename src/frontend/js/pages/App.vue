@@ -7,6 +7,7 @@
     }">
     <!-- feed list -->
     <div
+      v-show="feedListVisible"
       id="col-feed-list"
       class="vh-100 position-relative d-flex flex-column border-end flex-shrink-0"
       :style="{ width: feedListWidth + 'px' }">
@@ -623,6 +624,7 @@ export default defineComponent({
       feeds: [] as Feed[],
       feedSelected: s.feed,
       feedListWidth: s.feed_list_width || 300,
+      feedListVisible: s.feed_list_visible !== false,
       items: [] as Item[],
       itemsHasMore: true,
       itemSelected: null as number | null,
@@ -1076,6 +1078,56 @@ export default defineComponent({
       this.itemSelected = null;
       this.itemsHasMore = false;
       this.refreshStats();
+    },
+    async markAllItemsRead() {
+      const [err] = await to(api.items.mark_read({}));
+      if (err) {
+        this.$refs.toast.addToast(
+          { title: this.$t("fail_update_article"), description: this.errDescription(err) },
+          { level: "fail", closeable: false },
+        );
+        return;
+      }
+      this.items = [];
+      this.itemSelected = null;
+      this.itemsHasMore = false;
+      this.refreshStats();
+    },
+    toggleFeedList() {
+      this.feedListVisible = !this.feedListVisible;
+      api.settings.update({ feed_list_visible: this.feedListVisible });
+    },
+    showAllFeeds() {
+      this.feedSelected = null;
+      this.filterSelected = "";
+    },
+    toggleCurrentFolder() {
+      if (!this.feedSelected) return;
+      const parts = String(this.feedSelected).split(":", 2);
+      let folder: Folder | undefined;
+      if (parts[0] === "folder") {
+        folder = this.folders.find((f) => String(f.id) === parts[1]);
+      } else if (parts[0] === "feed") {
+        const feed = this.feeds.find((f) => String(f.id) === parts[1]);
+        if (feed?.folder_id != null) {
+          folder = this.folders.find((f) => f.id === feed.folder_id);
+        }
+      }
+      if (folder) this.toggleFolderExpanded(folder);
+    },
+    async toggleAllFolders(expand: boolean) {
+      for (const folder of this.folders) {
+        if (folder.is_expanded === expand) continue;
+        folder.is_expanded = expand;
+        const [err] = await to(api.folders.update(folder.id, { is_expanded: expand }));
+        if (err) {
+          this.$refs.toast.addToast(
+            { title: this.$t("fail_save_folder"), description: this.errDescription(err) },
+            { level: "fail", closeable: false },
+          );
+          return;
+        }
+      }
     },
     async toggleFolderExpanded(folder: Folder) {
       folder.is_expanded = !folder.is_expanded;

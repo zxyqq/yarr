@@ -78,6 +78,30 @@ export function setupKeybindings(vm: InstanceType<typeof App>) {
     showStarred() {
       vm.filterSelected = "starred";
     },
+    toggleFeedList() {
+      vm.toggleFeedList();
+    },
+    markAllItemsRead() {
+      vm.markAllItemsRead();
+    },
+    showAllFeeds() {
+      vm.showAllFeeds();
+    },
+    toggleCurrentFolder() {
+      vm.toggleCurrentFolder();
+    },
+    collapseAllFolders() {
+      vm.toggleAllFolders(false);
+    },
+    expandAllFolders() {
+      vm.toggleAllFolders(true);
+    },
+    resizeFeedList(delta: number) {
+      vm.resizeFeedList(vm.feedListWidth + delta);
+    },
+    resizeItemList(delta: number) {
+      vm.resizeItemList(vm.itemListWidth + delta);
+    },
   };
 
   // If you edit, make sure you update the help modal
@@ -99,6 +123,26 @@ export function setupKeybindings(vm: InstanceType<typeof App>) {
     "1": shortcutFunctions.showUnread,
     "2": shortcutFunctions.showStarred,
     "3": shortcutFunctions.showAll,
+    u: shortcutFunctions.toggleItemRead,
+    w: shortcutFunctions.toggleFeedList,
+    a: shortcutFunctions.markAllItemsRead,
+    A: shortcutFunctions.showAllFeeds,
+    x: shortcutFunctions.toggleCurrentFolder,
+    c: shortcutFunctions.toggleCurrentFolder,
+    C: shortcutFunctions.collapseAllFolders,
+    X: shortcutFunctions.expandAllFolders,
+    "[": function () {
+      shortcutFunctions.resizeFeedList(-50);
+    },
+    "]": function () {
+      shortcutFunctions.resizeFeedList(+50);
+    },
+    "{": function () {
+      shortcutFunctions.resizeItemList(-50);
+    },
+    "}": function () {
+      shortcutFunctions.resizeItemList(+50);
+    },
   } as Record<string, CallableFunction>;
 
   var codebindings = {
@@ -118,6 +162,11 @@ export function setupKeybindings(vm: InstanceType<typeof App>) {
     Digit1: shortcutFunctions.showUnread,
     Digit2: shortcutFunctions.showStarred,
     Digit3: shortcutFunctions.showAll,
+    KeyU: shortcutFunctions.toggleItemRead,
+    KeyW: shortcutFunctions.toggleFeedList,
+    KeyA: shortcutFunctions.markAllItemsRead,
+    KeyX: shortcutFunctions.toggleCurrentFolder,
+    KeyC: shortcutFunctions.toggleCurrentFolder,
   } as Record<string, CallableFunction>;
 
   function isTextBox(element: Element) {

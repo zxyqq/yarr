@@ -54,6 +54,33 @@
         <div class="w-25"><kbd>f</kbd> <kbd>b</kbd></div>
         <div class="w-75">{{ $t("kb_scroll_content") }}</div>
       </div>
+
+      <div class="py-3"></div>
+
+      <div class="d-flex py-1">
+        <div class="w-25"><kbd>w</kbd></div>
+        <div class="w-75">{{ $t("kb_toggle_feed_list") }}</div>
+      </div>
+      <div class="d-flex py-1">
+        <div class="w-25"><kbd>a</kbd></div>
+        <div class="w-75">{{ $t("kb_mark_all_read_everywhere") }}</div>
+      </div>
+      <div class="d-flex py-1">
+        <div class="w-25"><kbd>A</kbd></div>
+        <div class="w-75">{{ $t("kb_show_all_feeds") }}</div>
+      </div>
+      <div class="d-flex py-1">
+        <div class="w-25"><kbd>x</kbd> <kbd>c</kbd></div>
+        <div class="w-75">{{ $t("kb_toggle_current_folder") }}</div>
+      </div>
+      <div class="d-flex py-1">
+        <div class="w-25"><kbd>C</kbd> <kbd>X</kbd></div>
+        <div class="w-75">{{ $t("kb_toggle_all_folders") }}</div>
+      </div>
+      <div class="d-flex py-1">
+        <div class="w-25"><kbd>[</kbd> <kbd>]</kbd> <kbd>{</kbd> <kbd>}</kbd></div>
+        <div class="w-75">{{ $t("kb_resize_columns") }}</div>
+      </div>
     </div>
   </div>
 </template>
