@@ -1098,11 +1098,16 @@ export default defineComponent({
       api.settings.update({ feed_list_visible: this.feedListVisible });
     },
     showAllFeeds() {
-      this.feedSelected = null;
+      this.feedSelected = "";
       this.filterSelected = "";
     },
     toggleCurrentFolder() {
-      if (!this.feedSelected) return;
+      if (!this.feedSelected) {
+        // No folder selected (e.g. "All Feeds"): toggle every folder.
+        const anyExpanded = this.folders.some((f) => f.is_expanded);
+        this.toggleAllFolders(!anyExpanded);
+        return;
+      }
       const parts = String(this.feedSelected).split(":", 2);
       let folder: Folder | undefined;
       if (parts[0] === "folder") {
