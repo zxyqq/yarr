@@ -7,7 +7,7 @@
     }">
     <!-- feed list -->
     <div
-      v-show="feedListVisible"
+      v-if="feedListVisible"
       id="col-feed-list"
       class="vh-100 position-relative d-flex flex-column border-end flex-shrink-0"
       :style="{ width: feedListWidth + 'px' }">
@@ -331,6 +331,7 @@
           v-for="item in items"
           :key="item.id"
           class="c-listitem d-flex flex-column user-select-none"
+          :class="{ 'is-unread': item.status == 'unread', 'is-read': item.status == 'read' }"
           role="radio"
           :aria-checked="itemSelected === item.id"
           @click="itemSelected = item.id">
@@ -354,7 +355,7 @@
             </small>
             <small class="flex-shrink-0"><v-relative-time :val="item.date" :locale="language" /></small>
           </div>
-          <div class="text-break line-clamp-3">{{ item.title || $t("untitled") }}</div>
+          <div class="c-listitem-title text-break line-clamp-3">{{ item.title || $t("untitled") }}</div>
         </div>
         <div class="text-center my-3" v-if="itemsHasMore">
           <span class="c-spinner"></span>
@@ -1104,8 +1105,7 @@ export default defineComponent({
     toggleCurrentFolder() {
       if (!this.feedSelected) {
         // No folder selected (e.g. "All Feeds"): toggle every folder.
-        const anyExpanded = this.folders.some((f) => f.is_expanded);
-        this.toggleAllFolders(!anyExpanded);
+        this.toggleAllFoldersEverywhere();
         return;
       }
       const parts = String(this.feedSelected).split(":", 2);
@@ -1119,6 +1119,10 @@ export default defineComponent({
         }
       }
       if (folder) this.toggleFolderExpanded(folder);
+    },
+    toggleAllFoldersEverywhere() {
+      const anyExpanded = this.folders.some((f) => f.is_expanded);
+      this.toggleAllFolders(!anyExpanded);
     },
     async toggleAllFolders(expand: boolean) {
       for (const folder of this.folders) {

@@ -849,6 +849,16 @@
     "zh": "展开/收起当前文件夹",
     "ru": "Свернуть/развернуть текущую папку"
   },
+  "kb_collapse_all_folders": {
+    "en": "Collapse all folders",
+    "de": "Alle Ordner zuklappen",
+    "fr": "Réplier tous les dossiers",
+    "es": "Plegar todas las carpetas",
+    "ja": "すべてのフォルダを閉じる",
+    "pt": "Recolher todas as pastas",
+    "zh": "全部文件夹收起",
+    "ru": "Свернуть все папки"
+  },
   "kb_toggle_all_folders": {
     "en": "Collapse/expand all folders",
     "de": "Alle Ordner auf-/zuklappen",

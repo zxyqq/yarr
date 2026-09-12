@@ -160,6 +160,18 @@
     color: var(--v-active-fg);
     background-color: var(--v-active-bg);
   }
+
+  &.is-unread .c-listitem-title {
+    font-weight: 600;
+  }
+
+  &.is-read {
+    opacity: 0.55;
+  }
+  &.is-read:hover,
+  &.is-read[aria-checked="true"] {
+    opacity: 1;
+  }
   /* TODO: implement ui states: default / hover / [aria-checked=true] */
 }
 

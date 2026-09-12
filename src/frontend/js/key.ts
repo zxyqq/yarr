@@ -99,8 +99,8 @@ export function setupKeybindings(vm: InstanceType<typeof App>) {
     collapseAllFolders() {
       vm.toggleAllFolders(false);
     },
-    expandAllFolders() {
-      vm.toggleAllFolders(true);
+    toggleAllFolders() {
+      vm.toggleAllFoldersEverywhere();
     },
     resizeFeedList(delta: number) {
       vm.resizeFeedList(vm.feedListWidth + delta);
@@ -138,7 +138,7 @@ export function setupKeybindings(vm: InstanceType<typeof App>) {
     x: shortcutFunctions.toggleCurrentFolder,
     c: shortcutFunctions.toggleCurrentFolder,
     C: shortcutFunctions.collapseAllFolders,
-    X: shortcutFunctions.expandAllFolders,
+    X: shortcutFunctions.toggleAllFolders,
     "[": function () {
       shortcutFunctions.resizeFeedList(-50);
     },

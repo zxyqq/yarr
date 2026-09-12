@@ -78,7 +78,11 @@
         <div class="w-75">{{ $t("kb_toggle_current_folder") }}</div>
       </div>
       <div class="d-flex py-1">
-        <div class="w-25"><kbd>C</kbd> <kbd>X</kbd></div>
+        <div class="w-25"><kbd>C</kbd></div>
+        <div class="w-75">{{ $t("kb_collapse_all_folders") }}</div>
+      </div>
+      <div class="d-flex py-1">
+        <div class="w-25"><kbd>X</kbd></div>
         <div class="w-75">{{ $t("kb_toggle_all_folders") }}</div>
       </div>
       <div class="d-flex py-1">
