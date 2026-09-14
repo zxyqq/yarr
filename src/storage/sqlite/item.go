@@ -88,13 +88,20 @@ func (s *SQLiteStorage) CreateItems(items []model.Item) bool {
 	return true
 }
 
-func containsNonASCII(s string) bool {
+// isFTSTerm reports whether s is a single token that the FTS tokenizer indexes
+// as one word (ASCII letters/digits). Terms that contain punctuation (e.g.
+// "8-1") or non-ASCII characters (e.g. CJK) are not, and are matched with LIKE
+// instead so they are not split or mis-parsed by the FTS query parser.
+func isFTSTerm(s string) bool {
 	for _, r := range s {
 		if r > unicode.MaxASCII {
-			return true
+			return false
+		}
+		if !unicode.IsLetter(r) && !unicode.IsDigit(r) {
+			return false
 		}
 	}
-	return false
+	return len(s) > 0
 }
 
 func listQueryPredicate(filter model.ItemFilter, newestFirst bool) (string, []any) {
@@ -113,17 +120,18 @@ func listQueryPredicate(filter model.ItemFilter, newestFirst bool) (string, []an
 		args = append(args, sql.Named("status", *filter.Status))
 	}
 	if filter.Search != nil {
-		// ASCII terms use the FTS index (built over searchable(content), so
-		// link URLs are included). Non-ASCII terms (e.g. CJK) are not
-		// tokenized well by FTS and fall back to substring match.
+		// Simple ASCII terms use the FTS index (built over searchable(content),
+		// so link URLs are included). Terms with punctuation (e.g. "8-1") or
+		// non-ASCII characters (e.g. CJK) are not indexed as a single token and
+		// fall back to substring match.
 		words := strings.Fields(*filter.Search)
 		ftsTerms := make([]string, 0, len(words))
 		likeTerms := make([]string, 0)
 		for _, word := range words {
-			if containsNonASCII(word) {
-				likeTerms = append(likeTerms, word)
-			} else {
+			if isFTSTerm(word) {
 				ftsTerms = append(ftsTerms, word+"*")
+			} else {
+				likeTerms = append(likeTerms, word)
 			}
 		}
 		if len(ftsTerms) > 0 {
