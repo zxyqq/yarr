@@ -334,7 +334,8 @@
           :class="{ 'is-unread': item.status == 'unread', 'is-read': item.status == 'read' }"
           role="radio"
           :aria-checked="itemSelected === item.id"
-          @click="itemSelected = item.id">
+          @click="itemSelected = item.id"
+          @contextmenu.prevent="itemSelected = item.id; openItemLink(item)">
           <div
             style="line-height: 100%; opacity: 0.7; margin-bottom: 0.1rem"
             class="d-flex align-items-center">
@@ -1326,6 +1327,11 @@ export default defineComponent({
         return;
       }
       document.location.reload();
+    },
+    openItemLink(item: Item) {
+      if (item?.link) {
+        window.open(item.link, "_blank", "noopener,noreferrer");
+      }
     },
     async toggleReadability() {
       if (this.itemSelectedReadability) {
