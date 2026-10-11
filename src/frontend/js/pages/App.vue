@@ -1082,7 +1082,14 @@ export default defineComponent({
       this.refreshStats();
     },
     async markAllItemsRead() {
-      const [err] = await to(api.items.mark_read({}));
+      // Scope to the currently selected feed/folder; only mark everything
+      // when in "All Feeds" (no feed/folder selected).
+      const markQuery = this.getItemsQuery();
+      const query: ItemMarkQuery = {
+        folder_id: markQuery.folder_id,
+        feed_id: markQuery.feed_id,
+      };
+      const [err] = await to(api.items.mark_read(query));
       if (err) {
         this.$refs.toast.addToast(
           { title: this.$t("fail_update_article"), description: this.errDescription(err) },
@@ -1101,7 +1108,6 @@ export default defineComponent({
     },
     showAllFeeds() {
       this.feedSelected = "";
-      this.filterSelected = "";
     },
     toggleCurrentFolder() {
       if (!this.feedSelected) {
