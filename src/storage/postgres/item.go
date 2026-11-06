@@ -12,6 +12,7 @@ import (
 
 	"github.com/nkanaev/yarr/src/content/htmlutil"
 	"github.com/nkanaev/yarr/src/storage/model"
+	"github.com/nkanaev/yarr/src/storage/searchquery"
 )
 
 type MediaLinks model.MediaLinks
@@ -114,16 +115,20 @@ func listQueryPredicate(filter model.ItemFilter, newestFirst bool) (string, []an
 		args = append(args, *filter.Status)
 	}
 	if filter.Search != nil {
-		words := strings.Fields(*filter.Search)
-		terms := make([]string, len(words))
-		for idx, word := range words {
-			terms[idx] = word + ":*"
+		terms := make([]string, 0)
+		for _, term := range searchquery.Parse(*filter.Search) {
+			query := term.Text + ":*"
+			if term.Negated {
+				query = "!" + query
+			}
+			terms = append(terms, query)
 		}
-
-		cond = append(cond, fmt.Sprintf(
-			"i.search @@ to_tsquery('simple', $%d)", next(),
-		))
-		args = append(args, strings.Join(terms, " & "))
+		if len(terms) > 0 {
+			cond = append(cond, fmt.Sprintf(
+				"i.search @@ to_tsquery('simple', $%d)", next(),
+			))
+			args = append(args, strings.Join(terms, " & "))
+		}
 	}
 	if filter.After != nil {
 		compare := ">"

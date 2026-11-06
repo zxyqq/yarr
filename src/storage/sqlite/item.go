@@ -13,6 +13,7 @@ import (
 	"unicode"
 
 	"github.com/nkanaev/yarr/src/storage/model"
+	"github.com/nkanaev/yarr/src/storage/searchquery"
 )
 
 type MediaLinks model.MediaLinks
@@ -120,36 +121,51 @@ func listQueryPredicate(filter model.ItemFilter, newestFirst bool) (string, []an
 		args = append(args, sql.Named("status", *filter.Status))
 	}
 	if filter.Search != nil {
-		// Simple ASCII terms use the FTS index (built over searchable(content),
-		// so link URLs are included). Terms with punctuation (e.g. "8-1") or
-		// non-ASCII characters (e.g. CJK) are not indexed as a single token and
-		// fall back to substring match.
-		words := strings.Fields(*filter.Search)
-		ftsTerms := make([]string, 0, len(words))
-		likeTerms := make([]string, 0)
-		for _, word := range words {
-			if isFTSTerm(word) {
-				ftsTerms = append(ftsTerms, word+"*")
-			} else {
-				likeTerms = append(likeTerms, word)
+		var (
+			positiveFTS  []string
+			negativeFTS  []string
+			positiveLike []string
+			negativeLike []string
+		)
+		for _, term := range searchquery.Parse(*filter.Search) {
+			switch {
+			case isFTSTerm(term.Text) && term.Negated:
+				negativeFTS = append(negativeFTS, term.Text+"*")
+			case isFTSTerm(term.Text):
+				positiveFTS = append(positiveFTS, term.Text+"*")
+			case term.Negated:
+				negativeLike = append(negativeLike, term.Text)
+			default:
+				positiveLike = append(positiveLike, term.Text)
 			}
 		}
-		if len(ftsTerms) > 0 {
+		if len(positiveFTS) > 0 {
 			cond = append(
 				cond,
 				"i.id in (select rowid as id from search where search match :search)",
 			)
-			args = append(args, sql.Named("search", strings.Join(ftsTerms, " ")))
+			args = append(args, sql.Named("search", strings.Join(positiveFTS, " ")))
 		}
-		for i, term := range likeTerms {
-			cond = append(
-				cond,
-				fmt.Sprintf(
-					"(i.title LIKE '%%' || :like%d || '%%' OR searchable(i.content) LIKE '%%' || :like%d || '%%')",
-					i, i,
-				),
-			)
-			args = append(args, sql.Named(fmt.Sprintf("like%d", i), term))
+		for i, term := range negativeFTS {
+			name := fmt.Sprintf("neg_fts%d", i)
+			cond = append(cond, "i.id not in (select rowid as id from search where search match :"+name+")")
+			args = append(args, sql.Named(name, term))
+		}
+		for i, term := range positiveLike {
+			name := fmt.Sprintf("like%d", i)
+			cond = append(cond, fmt.Sprintf(
+				"(i.title LIKE '%%' || :%s || '%%' OR searchable(i.content) LIKE '%%' || :%s || '%%')",
+				name, name,
+			))
+			args = append(args, sql.Named(name, term))
+		}
+		for i, term := range negativeLike {
+			name := fmt.Sprintf("notlike%d", i)
+			cond = append(cond, fmt.Sprintf(
+				"NOT (coalesce(i.title, '') LIKE '%%' || :%s || '%%' OR searchable(coalesce(i.content, '')) LIKE '%%' || :%s || '%%')",
+				name, name,
+			))
+			args = append(args, sql.Named(name, term))
 		}
 	}
 	if filter.After != nil {
